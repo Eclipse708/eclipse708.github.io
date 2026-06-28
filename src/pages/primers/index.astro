@@ -1,0 +1,78 @@
+---
+// src/pages/primers/index.astro
+import Base from '../../layouts/Base.astro';
+import PostRow from '../../components/PostRow.astro';
+import { getCollection } from 'astro:content';
+
+// Pull all primers, hide drafts, sort newest-first
+const all = (await getCollection('primers', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+// Group by year
+const byYear = new Map<number, typeof all>();
+for (const p of all) {
+  const y = p.data.date.getFullYear();
+  if (!byYear.has(y)) byYear.set(y, []);
+  byYear.get(y)!.push(p);
+}
+const years = [...byYear.keys()].sort((a, b) => b - a);
+
+// Tag counts for filter chips
+const tagCounts = new Map<string, number>();
+for (const p of all) {
+  for (const t of p.data.tags) tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1);
+}
+const tags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]);
+
+const lastUpdated = all[0]?.data.date.toISOString().slice(0, 10).replace(/-/g, '.') ?? '—';
+const totalMin = all.reduce((sum, p) => sum + p.data.readingTime, 0);
+---
+<Base title="primers — eclipse708" context="INDEX /primers" footerRight={`${all.length} posts · ${totalMin} min total`}>
+  <a href="/" class="back">← <b>/index</b></a>
+
+  <div class="post-type">
+    <span class="jp">入門</span>
+    <span class="label">// PRIMERS</span>
+  </div>
+  <h1 class="index-title">all primers</h1>
+  <p class="index-dek">
+    fundamentals, explained without hand-waving.
+    {all.length > 0 ? `${all.length} published · last updated ${lastUpdated}` : 'first one shipping soon.'}
+  </p>
+
+  {all.length > 0 && (
+    <div class="filter">
+      <span class="filter-label">FILTER</span>
+      <a href="#" class="chip active">all<i>{all.length}</i></a>
+      {tags.map(([tag, count]) => (
+        <a href={`#${tag}`} class="chip">{tag}<i>{count}</i></a>
+      ))}
+    </div>
+  )}
+
+  {years.map(year => (
+    <>
+      <div class="year-marker">
+        <span class="jp">{year}年</span>
+        <span class="label">// {byYear.get(year)!.length}</span>
+        <span class="line"></span>
+      </div>
+      {byYear.get(year)!.map(p => (
+        <PostRow
+          date={p.data.date}
+          level={p.data.level}
+          title={p.data.title}
+          href={`/primers/${p.id}`}
+          topic={p.data.tags[0] ?? ''}
+          readingTime={p.data.readingTime}
+        />
+      ))}
+    </>
+  ))}
+
+  {all.length === 0 && (
+    <p style="color: var(--text-muted); font-size: 13px; margin-top: 24px;">
+      no primers published yet. the first one is in progress — check back soon.
+    </p>
+  )}
+</Base>

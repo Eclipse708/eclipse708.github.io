@@ -1,0 +1,25 @@
+---
+// src/components/ProgressBar.astro
+// Reading progress bar — sticky at the top of post pages.
+---
+<div class="progress"><div class="progress-fill" id="prog"></div></div>
+
+<script is:inline>
+  (() => {
+    const bar = document.getElementById('prog');
+    if (!bar) return;
+    let raf = 0;
+    const update = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0;
+      bar.style.width = pct + '%';
+      raf = 0;
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    document.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+  })();
+</script>

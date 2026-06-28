@@ -1,0 +1,48 @@
+---
+// src/components/Hud.astro
+// The top HUD strip. Used on every page.
+// Props let pages customise the right-hand text and switch to "offline" mode (404).
+export interface Props {
+  context?: string;        // right-hand text, e.g. "INDEX /primers" or "READING /primers/0001"
+  offline?: boolean;       // true for 404 / error pages
+  buildId?: string;        // overrides default build id
+  version?: string;        // overrides default version
+}
+
+const {
+  context,
+  offline = false,
+  buildId = '0x0001',
+  version = 'v0.1',
+} = Astro.props;
+
+// Date in YYYY.MM.DD
+const today = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
+---
+<div class="hud">
+  <div>
+    {offline ? (
+      <span><span class="pulse offline"></span><span class="status-offline">OFFLINE</span></span>
+    ) : (
+      <span><span class="pulse"></span>ONLINE</span>
+    )}
+
+    {offline ? (
+      <span>SIGNAL LOST · COORDS UNKNOWN</span>
+    ) : (
+      <span data-tooltip="α Ori — Betelgeuse">RA 05ʰ55ᵐ10.3ˢ · DEC +07°24′25.4″</span>
+    )}
+
+    <span>{today}</span>
+  </div>
+  <div>
+    {context ? (
+      <span>{context}</span>
+    ) : (
+      <>
+        <span>BUILD {buildId}</span>
+        <span style="color: var(--accent)">{version}</span>
+      </>
+    )}
+  </div>
+</div>

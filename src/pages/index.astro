@@ -1,0 +1,92 @@
+---
+// src/pages/index.astro
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+// Count published primers so the INDEX section shows accurate numbers.
+const primerCount = (await getCollection('primers', ({ data }) => !data.draft)).length;
+---
+<Base title="eclipse708">
+  <div class="name">
+    <div class="echo" aria-hidden="true">エクリプス</div>
+    <h1>asfandyar nawaz khan</h1>
+    <div class="handle">eclipse708<span class="cursor" aria-hidden="true"></span></div>
+  </div>
+  <p class="tagline">
+    security researcher (in training) / binary exploitation, cryptography / learning in public
+  </p>
+
+  <div class="divider" aria-hidden="true">──────────────────────────────────────</div>
+
+  <p class="bio">
+    i'm studying offensive security — currently working through binary exploitation, with cryptography
+    and low-level systems as the long-term focus. this site is where i'll write up what i learn, both
+    the research findings and the foundational stuff most tutorials skip past.
+  </p>
+
+  <div class="section">
+    <span class="jp">現在</span>
+    <span class="label">// NOW — current focus</span>
+    <span class="line"></span>
+  </div>
+
+  <div class="now-row">
+    <span class="now-label">STUDYING</span>
+    <span class="now-value"><span class="tl">pwn.college</span> — binary exploitation track</span>
+  </div>
+  <div class="now-row">
+    <span class="now-label">WRITING</span>
+    <span class="now-value">first primer: <span class="acc">RSA from the math up</span> (completed)</span>
+  </div>
+  <div class="now-row">
+    <span class="now-label">BUILDING</span>
+    <span class="now-value">tooling for crypto challenges &amp; CTF automation</span>
+  </div>
+  <div class="now-row">
+    <span class="now-label">READING</span>
+    <span class="now-value">the shellcoder's handbook · cryptography engineering</span>
+  </div>
+  <div class="now-row">
+    <span class="now-label">NEXT</span>
+    <span class="now-value">first writeup once i finish the current pwn module</span>
+  </div>
+
+  <div class="section">
+    <span class="jp">索引</span>
+    <span class="label">// INDEX</span>
+    <span class="line"></span>
+  </div>
+
+  <div class="sections-list">
+    <a href="/primers" class="section-row live">
+      <span class="section-jp">入門</span>
+      <span class="section-name">PRIMERS</span>
+      <span class="section-desc">fundamentals, explained without hand-waving</span>
+      <span class="section-meta">{primerCount} →</span>
+    </a>
+    <div class="section-row pending">
+      <span class="section-jp">記録</span>
+      <span class="section-name">LOG</span>
+      <span class="section-desc">research &amp; writeups</span>
+      <span class="section-meta">soon</span>
+    </div>
+    <div class="section-row pending">
+      <span class="section-jp">道具</span>
+      <span class="section-name">TOOLS</span>
+      <span class="section-desc">when the first one is useful to someone else</span>
+      <span class="section-meta">soon</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="jp">連絡</span>
+    <span class="label">// CONTACT</span>
+    <span class="line"></span>
+  </div>
+  <div class="contact">
+    <div><span class="k">mail</span><a href="mailto:eclipse708@proton.me" class="link">eclipse708@proton.me</a></div>
+    <div><span class="k">pgp</span><span class="pgp">4A7B 2C19 88F0 D3E5 6A1F · 9C8E 7D4B 22A0 FF63 1B07</span></div>
+    <div><span class="k">github</span><a href="https://github.com/eclipse708" class="link">github.com/eclipse708</a></div>
+    <div><span class="k">linkedin</span><a href="https://www.linkedin.com/in/asfandyar-nk/" class="link">linkedin.com/in/asfandyar-nk/</a></div>
+  </div>
+</Base>

@@ -1,0 +1,29 @@
+---
+// src/pages/primers/[...slug].astro
+// One generated page per primer in src/content/primers/
+// Astro 6+: use entry.id (not entry.slug), and render(entry) (not entry.render())
+import { getCollection, render } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import PostLayout from '../../layouts/Post.astro';
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const all = (await getCollection('primers', ({ data }) => !data.draft))
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+  return all.map((entry, i) => ({
+    params: { slug: entry.id },
+    props: {
+      entry,
+      // newer = prev (more recent), older = next (going back in time)
+      newer: i > 0 ? { id: all[i - 1].id, title: all[i - 1].data.title } : null,
+      older: i < all.length - 1 ? { id: all[i + 1].id, title: all[i + 1].data.title } : null,
+    },
+  }));
+};
+
+const { entry, newer, older } = Astro.props;
+const { Content } = await render(entry);
+---
+<PostLayout entry={entry} prev={newer} next={older} section="primers">
+  <Content />
+</PostLayout>

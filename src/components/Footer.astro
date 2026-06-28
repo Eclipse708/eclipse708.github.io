@@ -1,0 +1,12 @@
+---
+// src/components/Footer.astro
+export interface Props {
+  rightText?: string;
+}
+const { rightText = 'v0.1 — initial deploy' } = Astro.props;
+const year = new Date().getFullYear();
+---
+<div class="foot">
+  <span>© {year} · <a href="/security.txt">/security.txt</a> · <a href="/rss.xml">/rss</a></span>
+  <span>{rightText}</span>
+</div>

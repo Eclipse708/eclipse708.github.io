@@ -1,0 +1,71 @@
+---
+// src/layouts/Post.astro
+// Layout used by individual primer/log posts.
+import Base from './Base.astro';
+import ProgressBar from '../components/ProgressBar.astro';
+import type { CollectionEntry } from 'astro:content';
+
+export interface Props {
+  entry: CollectionEntry<'primers'>;
+  prev?: { id: string; title: string } | null;
+  next?: { id: string; title: string } | null;
+  section?: 'primers' | 'log';
+}
+
+const { entry, prev = null, next = null, section = 'primers' } = Astro.props;
+const { title, dek, date, level, tags, readingTime } = entry.data;
+
+// Section-specific labels
+const SECTION_META = {
+  primers: { jp: '入門', label: 'PRIMER', basePath: '/primers' },
+  log:     { jp: '記録', label: 'LOG',    basePath: '/log' },
+};
+const meta = SECTION_META[section];
+
+const dateStr = date.toISOString().slice(0, 10).replace(/-/g, '.');
+const tagStr = tags.join(' · ');
+const context = `READING ${meta.basePath}/${entry.id}`;
+---
+<Base title={`${title} — eclipse708`} description={dek} context={context}>
+  <ProgressBar slot="below-hud" />
+
+  <a href="/" class="back">← <b>/index</b> &nbsp;·&nbsp; <b>{meta.basePath}</b></a>
+
+  <div class="post-type">
+    <a href={meta.basePath} class="jp section-link" data-tooltip={`back to ${meta.basePath}`}>{meta.jp}</a>
+    <span class="label">// {meta.label}</span>
+  </div>
+  <h1 class="post-title">{title}</h1>
+  <p class="post-dek">{dek}</p>
+  <div class="post-meta">
+    <span><b>{dateStr}</b></span>
+    <span><span class={`level ${level}`}>{level}</span></span>
+    <span><b>{readingTime} min read</b></span>
+    <span>{tagStr}</span>
+  </div>
+
+  <article class="prose">
+    <slot />
+  </article>
+
+  <nav class="post-nav">
+    {prev ? (
+      <a href={`${meta.basePath}/${prev.id}`}>
+        <span class="nav-label">← PREV</span>{prev.title}
+      </a>
+    ) : (
+      <span style="color: var(--text-faint); font-size: 12px;">
+        <span class="nav-label">← PREV</span>(this is the first one)
+      </span>
+    )}
+    {next ? (
+      <a href={`${meta.basePath}/${next.id}`}>
+        <span class="nav-label">NEXT →</span>{next.title}
+      </a>
+    ) : (
+      <span style="color: var(--text-faint); font-size: 12px;">
+        <span class="nav-label">NEXT →</span>(latest)
+      </span>
+    )}
+  </nav>
+</Base>

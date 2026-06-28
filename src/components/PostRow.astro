@@ -1,0 +1,23 @@
+---
+// src/components/PostRow.astro
+export interface Props {
+  date: Date;
+  level: 'beginner' | 'intermediate' | 'advanced';
+  title: string;
+  href: string;
+  topic: string;
+  readingTime: number;
+}
+
+const { date, level, title, href, topic, readingTime } = Astro.props;
+
+const dateStr = date.toISOString().slice(0, 10).replace(/-/g, '.');
+const levelShort = { beginner: 'BEG', intermediate: 'INT', advanced: 'ADV' }[level];
+---
+<div class="post-row">
+  <span class="date">{dateStr}</span>
+  <span class={`badge ${level}`}>{levelShort}</span>
+  <a href={href} class="title">{title}</a>
+  <span class="topic">{topic}</span>
+  <span class="time">{readingTime}m</span>
+</div>

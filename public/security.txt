@@ -1,0 +1,20 @@
+# eclipse708 — security policy
+# RFC 9116 (https://www.rfc-editor.org/rfc/rfc9116)
+
+Contact: mailto:eclipse708@proton.me
+Expires: 2027-06-28T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://eclipse708.github.io/.well-known/security.txt
+
+# PGP key fingerprint (verify with the contact email above):
+# 4A7B 2C19 88F0 D3E5 6A1F  9C8E 7D4B 22A0 FF63 1B07
+#
+# To enable the Encryption: directive below, upload your public key to a
+# keyserver (e.g. keys.openpgp.org) and uncomment, replacing the URL.
+# Encryption: https://keys.openpgp.org/vks/v1/by-fingerprint/4A7B2C1988F0D3E56A1F9C8E7D4B22A0FF631B07
+
+# Scope:
+# This site is a personal portfolio and technical blog. Report issues with
+# the *site itself* (XSS in rendered posts, content injection, etc.) to the
+# contact above. For vulnerability disclosures in third-party software,
+# please contact the affected vendor directly — i'm not the right person.
