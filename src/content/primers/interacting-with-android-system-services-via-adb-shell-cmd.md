@@ -12,7 +12,7 @@ draft: false
 - **Reality:** Although it looks like a low-level system command, it usually invokes Java code inside Android's system server.
 - **Mechanism:** Commands are parsed by subclasses of `android.os.ShellCommand`, which then call the appropriate framework APIs or Binder interfaces.
 
-## 1. Problem with `service call`
+## Problem with `service call`
 
 I wanted to find a way to enable Location through `adb shell`. My first attempt was to use the low-level Binder interface via:
 
@@ -234,7 +234,7 @@ That's one reason relying on raw transaction numbers is considered brittle.
 
 ---
 
-## 2. Discovering the Correct Command
+## Discovering the Correct Command
 
 Instead of continuing to search for Binder transaction numbers, I inspected the shell interface exposed by the Location service:
 
@@ -265,7 +265,7 @@ cmd location set-location-enabled false
 ```
 
 ---
-## 3. Why This Works
+## Why This Works
 
 Many Android system services expose a shell (because it is in the shell) interface through the `cmd` utility. Internally, these commands are implemented by subclasses of `android.os.ShellCommand` (for example `LocationShellCommand`).
 
@@ -288,7 +288,7 @@ This means there is no need to determine Binder transaction IDs or manually cons
 
 ---
 
-## 4. Research Methodology
+## Research Methodology
 
 When interacting with an unfamiliar Android system service:
 
